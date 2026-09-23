@@ -1,6 +1,8 @@
 # Задание Codex: Михаил / AI
 
-Ты работаешь в существующем Career Quest, ветка mikhail-ai. Прочитай AGENTS.md, CONTEXT.md,
+Актуальный порядок: docs/START_HERE.md. Работа идёт в общем каталоге main.
+
+Ты работаешь в существующем Career Quest в общей папке main. Прочитай AGENTS.md, CONTEXT.md,
 README.md, docs/API_CONTRACT.md, docs/DATASET_AUDIT.md и docs/DATASET_README.md.
 Сначала git status и осмотр существующего ai/. Если уже есть реализованный движок и тесты,
 СОХРАНИ их и адаптируй к async recommend(RecommendationContext)->RecommendationResponse.

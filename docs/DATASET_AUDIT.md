@@ -2,9 +2,8 @@
 
 Источник: career_quest_dataset.zip, папка case_1/career_quest_dataset/.
 Проверены README.md, employees.json, events.json, skills.json, activity_history.csv.
-README.ru.md/README.kz.md как содержательных файлов в архиве нет: присутствуют только служебные
-AppleDouble __MACOSX/._README.ru.md и __MACOSX/._README.kz.md. Их нельзя принимать за переводы.
-Фактические поля названий/описаний в приложенном наборе — английские; локализация UI отдельно.
+В архиве есть содержательные README.ru.md и README.kz.md, а также служебные AppleDouble-копии в __MACOSX.
+Фактические поля названий/описаний в JSON — английские; перевод UI отдельно.
 
 | Набор | Фактический объём |
 |---|---:|

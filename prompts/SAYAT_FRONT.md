@@ -1,6 +1,8 @@
 # Задание Codex: Саят / frontend
 
-Ты работаешь в существующем Career Quest, ветка sayat-front. Прочитай AGENTS.md, CONTEXT.md,
+Актуальный порядок: docs/START_HERE.md. Работа идёт в общем каталоге main.
+
+Ты работаешь в существующем Career Quest в общей папке main. Прочитай AGENTS.md, CONTEXT.md,
 README.md, docs/API_CONTRACT.md, shared/contracts.py и docs/examples/.
 Сначала git status и осмотр текущего frontend. Сохрани полезный уже написанный UI.
 Меняй только frontend/**. Не меняй API URL, Python, формулы, event IDs и JSON-схему под свой интерфейс.

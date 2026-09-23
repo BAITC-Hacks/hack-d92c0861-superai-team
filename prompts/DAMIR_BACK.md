@@ -1,6 +1,8 @@
 # Задание Codex: Дамир / backend
 
-Ты работаешь в существующем Career Quest, ветка damir-back. Прочитай AGENTS.md, CONTEXT.md,
+Актуальный порядок: docs/START_HERE.md. Работа идёт в общем каталоге main.
+
+Ты работаешь в существующем Career Quest в общей папке main. Прочитай AGENTS.md, CONTEXT.md,
 README.md, docs/API_CONTRACT.md, shared/contracts.py и docs/DATASET_README.md.
 Сначала git status и осмотр уже написанного кода. Не перезаписывай чужую реализацию.
 Не меняй Vue, ai/**, URL и публичные JSON-схемы. Общие изменения сначала явно предложи команде.
