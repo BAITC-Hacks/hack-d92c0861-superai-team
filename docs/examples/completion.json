@@ -1,0 +1,43 @@
+{
+  "employee_id": "E0001",
+  "event_id": "EV_SYS",
+  "already_applied": false,
+  "data_version": 2,
+  "skill_deltas": [
+    {
+      "skill_id": "SK_SYSTEM_DESIGN",
+      "before": 2,
+      "after": 3,
+      "delta": 1,
+      "gain": 1,
+      "max_level": 4
+    }
+  ],
+  "trajectory": {
+    "target_role": "Backend Engineer",
+    "target_grade": "Senior",
+    "target_source": "next_grade",
+    "progress_pct": 60.0,
+    "remaining_gap": 2,
+    "critical_gaps": 1,
+    "gaps": [
+      {
+        "skill_id": "SK_SYSTEM_DESIGN",
+        "name": "System Design",
+        "current": 3,
+        "required": 4,
+        "gap": 1,
+        "critical": true
+      },
+      {
+        "skill_id": "SK_PUBLIC_SPEAKING",
+        "name": "Public Speaking",
+        "current": 0,
+        "required": 1,
+        "gap": 1,
+        "critical": false
+      }
+    ],
+    "note": "Покрытие требований по навыкам, не вероятность и не гарантия повышения."
+  }
+}

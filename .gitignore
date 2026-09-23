@@ -1,0 +1,21 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+node_modules/
+frontend/dist/
+.local/
+*.log
+.DS_Store
+__MACOSX/
+# Official dataset stays local / in the organizer-approved repository only.
+docs/employees.json
+docs/events.json
+docs/skills.json
+docs/activity_history.csv
+docs/DATASET_README.md
+career_quest_dataset.zip
