@@ -27,9 +27,12 @@ def effective_skills(data: Dataset, employee_id: str) -> dict[str, int]:
     employee = data.employees[employee_id]
     result = dict(employee["skills"])
     # employees.skills is an assessment snapshot, not a zero-point history replay.
-    for row in data.employee_history(employee_id):
+    for row in sorted(data.employee_history(employee_id), key=lambda r: (r.get("completed_at", r["date"]), r["record_id"])):
+        # Runtime timestamps are separate from enrollment dates. A new completion
+        # on the assessment day happens after the date-only assessment snapshot.
+        occurred = row.get("completed_at", row["date"])
         if (row["status"] == "completed" and
-            employee["last_review_date"] < row["date"] <= data.as_of_date.isoformat()):
+            employee["last_review_date"] < occurred and occurred[:10] <= data.as_of_date.isoformat()):
             result, _ = apply_gains(result, data.events[row["event_id"]])
     return result
 

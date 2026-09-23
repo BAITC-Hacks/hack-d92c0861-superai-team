@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -25,9 +25,21 @@ class Dataset:
     role_profiles: dict[tuple[str, str], dict[str, Any]]
     history: list[dict[str, str]]
     version: int = 1
+    runtime_completions: list[dict[str, str]] = field(default_factory=list)
 
     def employee_history(self, employee_id: str) -> list[dict[str, str]]:
-        return [r for r in self.history if r["employee_id"] == employee_id]
+        rows = {r["record_id"]: dict(r) for r in self.history if r["employee_id"] == employee_id}
+        for completion in self.runtime_completions:
+            if completion["employee_id"] != employee_id:
+                continue
+            rid = completion["participation_record_id"] or completion["record_id"]
+            row = rows.get(rid, {"record_id": rid, "employee_id": employee_id,
+                "event_id": completion["event_id"], "date": completion["session_date"],
+                "due_date": "", "score": "", "feedback_rating": "",
+                "assigned_by": completion["assigned_by"]})
+            rows[rid] = {**row, "status": "completed", "completion_pct": "100",
+                         "completed_at": completion["completed_at"]}
+        return sorted(rows.values(), key=lambda r: (r["date"], r["record_id"]))
 
 
 def read_json(raw: bytes) -> dict:
@@ -43,13 +55,13 @@ def read_json(raw: bytes) -> dict:
 def read_history(raw: bytes) -> list[dict[str, str]]:
     try:
         reader = csv.DictReader(io.StringIO(raw.decode("utf-8-sig"), newline=""))
-        if not CSV_COLUMNS.issubset(set(reader.fieldnames or [])):
-            raise DatasetError(f"Missing CSV columns: {sorted(CSV_COLUMNS-set(reader.fieldnames or []))}")
+        if set(reader.fieldnames or []) != CSV_COLUMNS or len(reader.fieldnames or []) != len(CSV_COLUMNS):
+            raise DatasetError("CSV header must contain each original schema column exactly once")
         rows = list(reader)
         if any(None in row or any(value is None for value in row.values()) for row in rows):
             raise DatasetError("Malformed CSV row: column count does not match header")
         return rows
-    except UnicodeError as exc:
+    except (UnicodeError, csv.Error) as exc:
         raise DatasetError("CSV must be UTF-8") from exc
 
 
@@ -95,13 +107,22 @@ def parse_dataset(employees_doc: dict, events_doc: dict, skills_doc: dict,
                 raise DatasetError(f"Critical skill without requirement: {key}")
         for employee in employees.values():
             eid = employee["employee_id"]
+            for key in ("full_name", "department", "role", "grade", "work_format", "preferred_language"):
+                if not isinstance(employee[key], str) or not employee[key].strip():
+                    raise DatasetError(f"Invalid {key}: {eid}")
+            if not isinstance(employee["skills"], dict):
+                raise DatasetError(f"skills must be an object: {eid}")
+            manager = employee["manager_id"]
+            if manager is not None and (not isinstance(manager, str) or manager == eid):
+                raise DatasetError(f"Invalid manager: {eid}")
             if (employee["role"], employee["grade"]) not in profiles:
                 raise DatasetError(f"Unknown role/grade: {eid}")
             if employee["manager_id"] is not None and employee["manager_id"] not in employees:
                 raise DatasetError(f"Unknown manager: {eid}")
             if date.fromisoformat(employee["last_review_date"]) > snapshot:
                 raise DatasetError(f"Assessment after snapshot: {eid}")
-            date.fromisoformat(employee["hire_date"])
+            if date.fromisoformat(employee["hire_date"]) > date.fromisoformat(employee["last_review_date"]):
+                raise DatasetError(f"Hire date after assessment: {eid}")
             if type(employee["tenure_months"]) is not int or employee["tenure_months"] < 0:
                 raise DatasetError(f"Invalid tenure: {eid}")
             if employee["work_format"] not in {"office", "remote", "hybrid"}:
@@ -111,9 +132,17 @@ def parse_dataset(employees_doc: dict, events_doc: dict, skills_doc: dict,
             for sid, value in employee["skills"].items():
                 if sid not in skills: raise DatasetError(f"Unknown skill: {sid}")
                 level(value, sid)
-            goal = employee.get("career_goal")
-            if goal and (goal["target_role"], goal["target_grade"]) not in profiles:
-                raise DatasetError(f"Unknown career goal: {eid}")
+            goal = employee["career_goal"]
+            if goal is not None:
+                if not isinstance(goal, dict) or not all(isinstance(goal.get(k), str)
+                        for k in ("target_role", "target_grade")):
+                    raise DatasetError(f"Invalid career goal: {eid}")
+                if (goal["target_role"], goal["target_grade"]) not in profiles:
+                    raise DatasetError(f"Unknown career goal: {eid}")
+            target_grade = goal["target_grade"] if goal else GRADES[min(GRADES.index(employee["grade"])+1, 3)]
+            target_role = goal["target_role"] if goal else employee["role"]
+            if (target_role, target_grade) not in profiles:
+                raise DatasetError(f"Missing target role profile: {eid}")
         for event in events.values():
             if type(event["mandatory"]) is not bool:
                 raise DatasetError("mandatory must be boolean")
@@ -134,6 +163,8 @@ def parse_dataset(employees_doc: dict, events_doc: dict, skills_doc: dict,
             for session in event["upcoming_sessions"]: date.fromisoformat(session)
         index_unique(history, "record_id")
         for row in history:
+            if not CSV_COLUMNS.issubset(row) or any(not isinstance(v, str) for v in row.values()):
+                raise DatasetError("Invalid history fields")
             if row["employee_id"] not in employees or row["event_id"] not in events:
                 raise DatasetError(f"Orphan history row: {row['record_id']}")
             if row["status"] not in STATUSES:
@@ -151,7 +182,7 @@ def parse_dataset(employees_doc: dict, events_doc: dict, skills_doc: dict,
                 raise DatasetError("Invalid assigned_by")
         return Dataset(snapshot, employees, events, skills, profiles,
                        sorted(history, key=lambda r: (r["date"], r["record_id"])))
-    except (KeyError, TypeError, ValueError) as exc:
+    except (KeyError, TypeError, ValueError, AttributeError) as exc:
         if isinstance(exc, DatasetError): raise
         raise DatasetError(f"Dataset schema error: {exc}") from exc
 
