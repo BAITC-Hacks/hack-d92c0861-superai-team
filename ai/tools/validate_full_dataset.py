@@ -31,16 +31,21 @@ DATASET_FILENAMES = (
 )
 
 
-def find_dataset_directory(repository_root: Path | None = None) -> Path | None:
+def find_dataset_directory(
+    repository_root: Path | None = None,
+    candidate_directories: Sequence[str | Path] = ("docs", "data"),
+) -> Path | None:
     """Locate a complete local dataset without assuming a record count.
 
-    Phase 2.5 treats ``data/`` as the intended full-dataset location. A caller
-    may still pass another directory explicitly to diagnose it.
+    Callers can supply an explicit directory to ``validate_full_dataset`` or
+    override the locations searched here. The defaults support this repository
+    layout and the common alternative layout without making either mandatory.
     """
     root = repository_root or Path(__file__).resolve().parents[2]
-    candidate = root / "data"
-    if all((candidate / filename).is_file() for filename in DATASET_FILENAMES):
-        return candidate
+    for directory in candidate_directories:
+        candidate = root / directory
+        if all((candidate / filename).is_file() for filename in DATASET_FILENAMES):
+            return candidate
     return None
 
 

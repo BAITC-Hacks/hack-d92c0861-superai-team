@@ -97,3 +97,28 @@ Avoid sending entire datasets to the LLM.
 
 Preprocess data locally and send only the relevant employee context
 and top candidate activities.
+
+## Team technology stack
+
+Frontend: Vue.js
+Backend: Python
+AI recommendation engine: Python
+
+The AI module is a Python library used directly by the Python backend.
+
+Do not create a separate HTTP server inside ai/.
+Do not add FastAPI or Flask to ai/ unless explicitly requested.
+
+Integration:
+
+Vue.js Frontend
+    ↓ HTTP/JSON
+Python Backend
+    ↓ direct Python import
+AI Recommendation Engine
+    ↓
+OpenAI API
+
+The backend owns HTTP endpoints.
+The AI module owns recommendation logic.
+The frontend must never call OpenAI directly.
