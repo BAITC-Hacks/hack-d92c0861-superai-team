@@ -10,6 +10,8 @@ const store = new Map()
 globalThis.localStorage = { getItem: key => store.get(key) ?? null, setItem: (key, value) => store.set(key, value) }
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom' })
 try {
+  const { default: ProfilePage } = await server.ssrLoadModule('/src/components/ProfilePage.vue')
+  const { default: App } = await server.ssrLoadModule('/src/App.vue')
   const { default: Workspace } = await server.ssrLoadModule('/src/components/CareerWorkspace.vue')
   const { default: i18n } = await server.ssrLoadModule('/src/i18n.js')
   const data = await server.ssrLoadModule('/src/data/career.js')
@@ -21,6 +23,15 @@ try {
     assert.deepEqual(flatten(i18n.global.messages.value[locale]), baseline)
     i18n.global.locale.value = locale
     await nextTick()
+    const profileHtml = await renderToString(createSSRApp(ProfilePage, { employee: defaultEmployee }).use(i18n))
+    assert.ok(profileHtml.includes(defaultEmployee.full_name))
+    assert.ok(profileHtml.includes(i18n.global.t('design.profile')))
+    assert.ok(!/>design\./.test(profileHtml))
+    globalThis.location = { hash: '#profile' }
+    const shellHtml = await renderToString(createSSRApp(App).use(i18n))
+    assert.ok(/href="#profile"[^>]*class="profile-trigger"/.test(shellHtml))
+    assert.ok(/href="#settings"[^>]*class="top-settings"/.test(shellHtml))
+    assert.ok(shellHtml.includes('profile-hero'))
     for (const page of ['overview', 'path', 'catalog', 'team', 'settings', 'help']) {
       const app = createSSRApp(Workspace, { page, employee: defaultEmployee }).use(i18n)
       const html = await renderToString(app)
@@ -45,7 +56,7 @@ try {
       assert.ok(event.event_id === 'EV_036' || !completedBy(event, employee))
     }
   }
-  const sources = ['src/App.vue', 'src/components/CareerWorkspace.vue', 'src/components/EventCard.vue'].map(file => fs.readFileSync(file, 'utf8')).join('\n')
+  const sources = ['src/App.vue', 'src/components/CareerWorkspace.vue', 'src/components/EventCard.vue', 'src/components/ProfilePage.vue'].map(file => fs.readFileSync(file, 'utf8')).join('\n')
   for (const [, key] of sources.matchAll(/\bt\('([^']+)'/g)) assert.ok(baseline.includes(key), key)
-  console.log('PASS: 18 page/locale renders, catalog and team counts, missing goal, key parity, progress and recommendation rules for 200 profiles.')
+  console.log('PASS: 18 workspace + 3 profile + 3 shell renders, catalog and team counts, missing goal, key parity, progress and recommendation rules for 200 profiles.')
 } finally { await server.close() }

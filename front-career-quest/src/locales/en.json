@@ -186,5 +186,25 @@
         "answer": "Career Quest 1.0: 200 employees, 60 skills and 40 activities. Snapshot: October 1, 2026. Role names and untranslated text appear in the source dataset language."
       }
     }
+  },
+  "design": {
+    "platform": "Career development platform",
+    "workspace": "My workspace",
+    "profile": "My profile",
+    "personalSpace": "MY SPACE",
+    "profileIntro": "Your role, experience and opportunities to grow.",
+    "personalAccount": "Personal profile",
+    "aboutProfile": "About me",
+    "grade": "Grade",
+    "joined": "Joined the team",
+    "lastReview": "Last review",
+    "profileGoalCopy": "The next stage in your development. Explore the requirements and make a plan to get closer to your goal.",
+    "expertise": "EXPERTISE",
+    "profileSkills": "My skills",
+    "skillsCount": "Skills: {count}",
+    "yourOverview": "Your career at a glance",
+    "goalProgress": "of target requirements met",
+    "howCalculated": "How progress is calculated",
+    "viewActivity": "View details"
   }
 }
