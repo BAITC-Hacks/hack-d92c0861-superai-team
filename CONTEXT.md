@@ -1,25 +1,78 @@
-# Context & Rules for Career Quest Hackathon Project
+# Career Quest — архитектурный контракт команды
 
-## Tech Stack
+## Цель и границы
+Хакатон HackAlem AI, Halyk Bank, кейс Career Quest. Три разработчика, окно реализации MVP — 3 часа.
+Основной сценарий: профиль → 1–3 релевантных шага с объяснением → выполнение → пересчитанный прогресс.
+HR видит разрывы компетенций, сотрудников без доступного шага и участие по активностям.
+Обязательна загрузка дополнительных профилей и истории жюри в исходной схеме.
+Баллы, рейтинги, награды, чат, мобильное приложение, платежи и прогноз увольнения не делаем.
 
-- Python 3.10+
-- Streamlit (UI Framework)
-- OpenAI API (gpt-4o) / NVIDIA API (Llama 3.1)
-- Pandas / JSON (Data Processing)
+## Стек и поток
+Сохраняем согласованный стек: Vue 3 + Vite → FastAPI → прямой async-вызов ai.engine.recommend(context).
+Один backend-процесс. AI — Python-пакет, не отдельный сервер. Никаких Redis, очередей и vector DB.
+Локальное runtime-состояние дорабатывает backend; рекомендуемый вариант — SQLite из стандартной библиотеки.
+Облачный или локальный chat-completions endpoint настраивается через server-only .env.
+Никакие ключи LLM не попадают в VITE_* и frontend bundle.
 
-## Core Domain Rules
+## Владение файлами
+Дамир / damir-back: backend/**, backend/domain.py, scripts/**, API/storage/import/HR-тесты.
+Саят / sayat-front: frontend/**, включая api.js, UI и клиентские проверки.
+Михаил / mikhail-ai: ai/**, AI-тесты, prompt и качество отбора/объяснений.
+shared/contracts.py и docs/API_CONTRACT.md — общий замороженный контракт v1.
+Если локальная ветка уже существует, работаем в ней. Не создавать параллельно mikhail-ai и michail-ai.
+Не перезаписывать ранее написанный ai/: сначала адаптировать его к общему entry point.
 
-1. Multi-factor Explainability: AI recommendations MUST be strictly based on 3+ factors (skill gaps for next grade, activity history/absences, tenure/current role). Single-factor or naive if/else logic is prohibited.
-2. Skill Upgrade Formula: Updating employee skills after completing an event must strictly follow `gain` and `max_level` rules specified in `events.json`.
-3. Data Safety: Synthetic data only. Must handle user-uploaded test JSON/CSV files dynamically.
+## Источники истины
+Требования: приложенное ТЗ Career Quest, разделы 4–10.
+Данные: README внутри career_quest_dataset.zip и четыре фактических файла.
+JSON имеет обёртки meta + employees/events; skills.json содержит skills и role_profiles.
+200 сотрудников, 40 событий, 60 навыков, 32 профиля ролей, 2743 строки истории.
+Модельная дата — meta.as_of_date = 2026-10-01, а не дата системных часов.
 
-## File Responsibilities
+## Детерминированные правила
+1. employees.skills — уровни последней оценки. Отсутствующий навык равен 0.
+2. На старте начислять только completed после last_review_date; записи в день оценки не начислять повторно.
+3. В историческом CSV нет completion_at. Для сверки с оценкой используем его date; это оговорённое
+   допущение, особенно для self_paced, где date обозначает enrollment/assignment, а не точный конец обучения.
+   Новые runtime-завершения должны хранить собственное completed_at отдельно от исходной истории.
+4. Прирост: after = max(before, min(5, before + gain, max_level)). Никогда не уменьшать навык.
+5. Цель: валидный career_goal, иначе следующий грейд той же роли. Для Lead без цели — текущие требования,
+   без выдуманного следующего грейда. Применение career_goal вместо default next grade — наше продуктовое решение.
+6. Требования и critical_skills брать из точного role_profiles[(target_role, target_grade)].
+7. Доступность: mandatory=false; текущие role/grade входят в аудиторию; prerequisites выполнены;
+   запланированная сессия не раньше as_of_date, либо self_paced, либо допустимое продолжение in_progress.
+8. Завершённые события не рекомендовать повторно, кроме EV_036. Для клуба нужны разные участия/сессии.
+9. Целевая роль при ротации сама по себе НЕ расширяет доступ к активностям другой роли.
+   Это консервативная политика допуска; показать HR блокер вместо скрытого обхода аудитории.
+10. Кандидат должен реально сокращать разрыв цели. При отсутствии кандидатов — steps=[] с причиной.
+11. Progress = 100 × sum(min(current,required)) / sum(required) по навыкам цели.
+    Это покрытие требований, не вероятность повышения. Повышение автоматически не выполнять.
+12. Три варианта рассчитаны от текущего состояния независимо: не складывать их прогнозы.
+    После каждого выполнения пересчитать профиль, доступность и рекомендации.
+13. История no_show/dropped/declined — наблюдения, не диагноз и не оценка личности/мотивации.
+14. Новые completions идемпотентны и сохраняются транзакционно; seed JSON/CSV не редактировать.
 
-- `data_loader.py`: Parsers for `employees.json`, `events.json`, `skills.json`, `activity_history.csv`.
-- `ai_engine.py`: Functions to construct system prompts and call OpenAI API with structured outputs.
-- `app.py`: Streamlit UI, state management (`st.session_state`), rendering profile & HR dashboards.
+## AI
+Backend готовит context: текущие факты, целевую матрицу, допустимые кандидаты и историю.
+LLM действительно выбирает/переупорядочивает кандидатов, а не только украшает готовый список текстом.
+Числа, eligibility и минимум три проверяемых фактора формирует код, не LLM.
+LLM разрешено возвращать только уникальные ID из candidates, максимум три.
+Режим ответа: llm или fallback; причина fallback явная. Сбой провайдера не должен ломать профиль/HR.
+Сквозной лимит ожидания провайдера 8 секунд, без автоматических повторов.
+Сортировка baseline — стартовая эвристика, её веса не обучены и не откалиброваны.
+Нельзя подбирать правила по employee_id или обещать прохождение скрытых проверок.
 
-## Code Style
+## API и безопасность
+Все доменные маршруты имеют /api. Схемы — shared/contracts.py, примеры — docs/examples/.
+Employee читает только свой профиль; HR может выбирать сотрудников и импортировать данные.
+Роль берётся на сервере из demo-token, не из X-Role, query string или переключателя в браузере.
+Demo-токены подходят только для локального показа, не заменяют корпоративный SSO.
+AI_ENABLED=false по умолчанию. Перед включением определить разрешённый организаторами endpoint.
+Передавать минимизированный контекст, не все файлы и не full_name/manager_id/raw history.
 
-- Write modular, well-commented Python code.
-- Always handle API connection exceptions gracefully.
+## Интеграция
+Каждый работает в своей папке. В main сливает один интегратор, по одной ветке, после проверок.
+Сначала общий контракт, затем сквозной сценарий, затем тесты жюри, затем freeze и демонстрация.
+Одна команда старта после установки/seed: python run.py --dev; для собранного UI: python run.py.
+Базовые проверки: python -m pytest -q; python scripts/check_dataset.py; npm --prefix frontend run build.
+Полный smoke test должен включать реальный вызов выбранной LLM, импорт и сохранение после перезапуска.

@@ -1,0 +1,284 @@
+{
+  "employee_id": "E0001",
+  "as_of_date": "2026-10-01",
+  "data_version": 1,
+  "mode": "fallback",
+  "fallback_reason": "AI_DISABLED",
+  "trajectory": {
+    "target_role": "Backend Engineer",
+    "target_grade": "Senior",
+    "target_source": "next_grade",
+    "progress_pct": 40.0,
+    "remaining_gap": 3,
+    "critical_gaps": 1,
+    "gaps": [
+      {
+        "skill_id": "SK_SYSTEM_DESIGN",
+        "name": "System Design",
+        "current": 2,
+        "required": 4,
+        "gap": 2,
+        "critical": true
+      },
+      {
+        "skill_id": "SK_PUBLIC_SPEAKING",
+        "name": "Public Speaking",
+        "current": 0,
+        "required": 1,
+        "gap": 1,
+        "critical": false
+      }
+    ],
+    "note": "Покрытие требований по навыкам, не вероятность и не гарантия повышения."
+  },
+  "steps": [
+    {
+      "event_id": "EV_SYS",
+      "title": "EV_SYS",
+      "action": "start",
+      "format": "self_paced",
+      "duration_hours": 2.0,
+      "next_session": null,
+      "factors": [
+        {
+          "code": "grade_goal",
+          "text": "Backend Engineer, Middle → Backend Engineer, Senior.",
+          "evidence": {
+            "role": "Backend Engineer",
+            "grade": "Middle",
+            "target_role": "Backend Engineer",
+            "target_grade": "Senior",
+            "target_source": "next_grade"
+          }
+        },
+        {
+          "code": "skill_gap",
+          "text": "System Design: 2 → 3, нужно 4 (критический навык)",
+          "evidence": {
+            "gap_reduction": 1,
+            "critical_gap_reduction": 1,
+            "changes": [
+              {
+                "skill_id": "SK_SYSTEM_DESIGN",
+                "before": 2,
+                "after": 3,
+                "delta": 1,
+                "gain": 1,
+                "max_level": 4
+              }
+            ]
+          }
+        },
+        {
+          "code": "history",
+          "text": "Похожих активностей в истории нет; предпочтения по ней не установлены.",
+          "evidence": {
+            "total": 3,
+            "completed": 0,
+            "no_show": 3,
+            "dropped": 0,
+            "declined": 0,
+            "in_progress": 0,
+            "similar_total": 0,
+            "similar_completed": 0,
+            "similar_no_show": 0,
+            "similar_dropped": 0,
+            "similar_declined": 0,
+            "similar_record_ids": [],
+            "similar_definition": "Добровольные активности того же типа ИЛИ с общим развиваемым навыком."
+          }
+        },
+        {
+          "code": "format",
+          "text": "Формат: self_paced; объём: 2 ч. Формат работы сотрудника: remote.",
+          "evidence": {
+            "format": "self_paced",
+            "work_format": "remote",
+            "duration_hours": 2.0
+          }
+        }
+      ],
+      "skill_deltas": [
+        {
+          "skill_id": "SK_SYSTEM_DESIGN",
+          "before": 2,
+          "after": 3,
+          "delta": 1,
+          "gain": 1,
+          "max_level": 4
+        }
+      ],
+      "progress_before_pct": 40.0,
+      "progress_after_pct": 60.0
+    },
+    {
+      "event_id": "EV_036",
+      "title": "EV_036",
+      "action": "start",
+      "format": "offline",
+      "duration_hours": 2.0,
+      "next_session": "2026-10-08",
+      "factors": [
+        {
+          "code": "grade_goal",
+          "text": "Backend Engineer, Middle → Backend Engineer, Senior.",
+          "evidence": {
+            "role": "Backend Engineer",
+            "grade": "Middle",
+            "target_role": "Backend Engineer",
+            "target_grade": "Senior",
+            "target_source": "next_grade"
+          }
+        },
+        {
+          "code": "skill_gap",
+          "text": "Public Speaking: 0 → 1, нужно 1",
+          "evidence": {
+            "gap_reduction": 1,
+            "critical_gap_reduction": 0,
+            "changes": [
+              {
+                "skill_id": "SK_PUBLIC_SPEAKING",
+                "before": 0,
+                "after": 1,
+                "delta": 1,
+                "gain": 1,
+                "max_level": 4
+              }
+            ]
+          }
+        },
+        {
+          "code": "history",
+          "text": "В похожих активностях: завершено 0 из 3; пропусков 3, отказов 0, прервано 0. Это наблюдения, не оценка мотивации.",
+          "evidence": {
+            "total": 3,
+            "completed": 0,
+            "no_show": 3,
+            "dropped": 0,
+            "declined": 0,
+            "in_progress": 0,
+            "similar_total": 3,
+            "similar_completed": 0,
+            "similar_no_show": 3,
+            "similar_dropped": 0,
+            "similar_declined": 0,
+            "similar_record_ids": [
+              "R0",
+              "R1",
+              "R2"
+            ],
+            "similar_definition": "Добровольные активности того же типа ИЛИ с общим развиваемым навыком."
+          }
+        },
+        {
+          "code": "format",
+          "text": "Формат: offline; объём: 2 ч. Формат работы сотрудника: remote.",
+          "evidence": {
+            "format": "offline",
+            "work_format": "remote",
+            "duration_hours": 2.0
+          }
+        }
+      ],
+      "skill_deltas": [
+        {
+          "skill_id": "SK_PUBLIC_SPEAKING",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "gain": 1,
+          "max_level": 4
+        }
+      ],
+      "progress_before_pct": 40.0,
+      "progress_after_pct": 60.0
+    },
+    {
+      "event_id": "EV_TALK",
+      "title": "EV_TALK",
+      "action": "start",
+      "format": "offline",
+      "duration_hours": 2.0,
+      "next_session": "2026-10-08",
+      "factors": [
+        {
+          "code": "grade_goal",
+          "text": "Backend Engineer, Middle → Backend Engineer, Senior.",
+          "evidence": {
+            "role": "Backend Engineer",
+            "grade": "Middle",
+            "target_role": "Backend Engineer",
+            "target_grade": "Senior",
+            "target_source": "next_grade"
+          }
+        },
+        {
+          "code": "skill_gap",
+          "text": "Public Speaking: 0 → 1, нужно 1",
+          "evidence": {
+            "gap_reduction": 1,
+            "critical_gap_reduction": 0,
+            "changes": [
+              {
+                "skill_id": "SK_PUBLIC_SPEAKING",
+                "before": 0,
+                "after": 1,
+                "delta": 1,
+                "gain": 1,
+                "max_level": 4
+              }
+            ]
+          }
+        },
+        {
+          "code": "history",
+          "text": "В похожих активностях: завершено 0 из 3; пропусков 3, отказов 0, прервано 0. Это наблюдения, не оценка мотивации.",
+          "evidence": {
+            "total": 3,
+            "completed": 0,
+            "no_show": 3,
+            "dropped": 0,
+            "declined": 0,
+            "in_progress": 0,
+            "similar_total": 3,
+            "similar_completed": 0,
+            "similar_no_show": 3,
+            "similar_dropped": 0,
+            "similar_declined": 0,
+            "similar_record_ids": [
+              "R0",
+              "R1",
+              "R2"
+            ],
+            "similar_definition": "Добровольные активности того же типа ИЛИ с общим развиваемым навыком."
+          }
+        },
+        {
+          "code": "format",
+          "text": "Формат: offline; объём: 2 ч. Формат работы сотрудника: remote.",
+          "evidence": {
+            "format": "offline",
+            "work_format": "remote",
+            "duration_hours": 2.0
+          }
+        }
+      ],
+      "skill_deltas": [
+        {
+          "skill_id": "SK_PUBLIC_SPEAKING",
+          "before": 0,
+          "after": 1,
+          "delta": 1,
+          "gain": 1,
+          "max_level": 4
+        }
+      ],
+      "progress_before_pct": 40.0,
+      "progress_after_pct": 60.0
+    }
+  ],
+  "no_step_reason": null,
+  "excluded": [],
+  "elapsed_ms": 0
+}

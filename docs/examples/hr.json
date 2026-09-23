@@ -1,0 +1,27 @@
+{
+  "as_of_date": "2026-10-01",
+  "data_version": 1,
+  "employees_count": 2,
+  "skill_gaps": [
+    {
+      "skill_id": "SK_SYSTEM_DESIGN",
+      "name": "System Design",
+      "employees_with_gap": 2,
+      "employees_requiring_skill": 2,
+      "gap_rate": 1.0,
+      "total_gap": 4,
+      "critical_employee_count": 2
+    }
+  ],
+  "employees_without_step": [],
+  "participation": [
+    {
+      "event_id": "EV_TALK",
+      "title": "EV_TALK",
+      "total_records": 3,
+      "by_status": {
+        "no_show": 3
+      }
+    }
+  ]
+}
