@@ -1,1 +1,6 @@
-"""Reserved for the Phase 2 LLM layer; no LLM integration is present in Phase 1."""
+"""OpenAI-backed contextual reranking with deterministic safety guards."""
+
+from .client import LLMConfig, OpenAIResponsesClient
+from .reranker import ContextualReranker
+
+__all__ = ["ContextualReranker", "LLMConfig", "OpenAIResponsesClient"]

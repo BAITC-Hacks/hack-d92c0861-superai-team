@@ -1,5 +1,5 @@
-"""Career Quest AI recommendation module.
+"""Career Quest deterministic recommendations with guarded contextual reranking."""
 
-Phase 1 provides deterministic data access, target resolution and skill-gap
-calculation. Recommendation selection is intentionally not implemented yet.
-"""
+from .service import CareerQuestAI
+
+__all__ = ["CareerQuestAI"]
