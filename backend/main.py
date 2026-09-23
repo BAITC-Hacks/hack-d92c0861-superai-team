@@ -127,7 +127,8 @@ def create_app(dataset: Dataset | None = None, storage_path: str | Path | None =
         result = await recommend(build_context(data, employee_id))
         with store.lock:
             # A provider request may finish after an import/completion has committed.
-            if store.data.version == data.version and key[2] == model_configuration():
+            transient_failure = result.fallback_reason in {"AI_TIMEOUT", "AI_PROVIDER_ERROR", "INVALID_AI_RESPONSE"}
+            if store.data.version == data.version and key[2] == model_configuration() and not transient_failure:
                 if len(cache) >= 512:
                     cache.pop(next(iter(cache)))
                 cache[key] = result

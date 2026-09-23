@@ -1,0 +1,38 @@
+{
+  "home": "Главная",
+  "catalog": "Каталог активностей",
+  "help": "Помощь и поддержка",
+  "settings": "Настройки",
+  "language": "Язык",
+  "all": "Все",
+  "design": {
+    "platform": "Карьерная платформа"
+  },
+  "pages": {
+    "navigation": "Навигация",
+    "search": "Поиск",
+    "searchEvents": "Название, ID или навык",
+    "type": "Тип",
+    "format": "Формат",
+    "types": {
+      "compliance": "Комплаенс",
+      "onboarding": "Адаптация",
+      "course": "Курс",
+      "workshop": "Воркшоп",
+      "mentoring": "Менторинг",
+      "certification": "Сертификация",
+      "meetup": "Митап"
+    },
+    "formats": {
+      "online": "Онлайн",
+      "offline": "Офлайн",
+      "self_paced": "В своём темпе"
+    },
+    "results": "Найдено: {count}",
+    "reset": "Сбросить фильтры",
+    "hours": "{count} ч",
+    "anytime": "Доступно в любое время",
+    "mandatory": "Обязательное",
+    "optional": "По выбору"
+  }
+}

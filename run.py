@@ -13,8 +13,10 @@ args = parser.parse_args()
 if not args.dev:
     if not (root/"frontend/dist/index.html").exists():
         raise SystemExit("First run: npm --prefix frontend run build. Or use python run.py --dev")
-    raise SystemExit(subprocess.call([sys.executable, "-m", "uvicorn", "backend.main:app",
-                        "--host", "127.0.0.1", "--port", "8000"], cwd=root))
+    # Run in this process so stopping the launcher also stops the server on Windows.
+    import uvicorn
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000)
+    raise SystemExit(0)
 npm = shutil.which("npm.cmd") or shutil.which("npm")
 if npm is None: raise SystemExit("Node.js/npm required for --dev")
 children = []
