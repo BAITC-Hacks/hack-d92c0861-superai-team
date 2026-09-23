@@ -12,11 +12,11 @@ Before modifying AI code, read:
 
 Dataset documentation:
 
-- `docs/employees.md`
-- `docs/skills.md`
-- `docs/events.md`
-- `docs/activity_history.md`
-- `docs/recommendation.md`
+- `docs/employees.json`
+- `docs/skills.json`
+- `docs/events.json`
+- `docs/activity_history.csv`
+- `docs/README.md`
 
 ## Project goal
 
