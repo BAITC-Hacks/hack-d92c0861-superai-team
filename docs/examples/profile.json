@@ -1,0 +1,91 @@
+{
+  "employee": {
+    "employee_id": "E0001",
+    "full_name": "Synthetic Test",
+    "department": "Engineering",
+    "role": "Backend Engineer",
+    "grade": "Middle",
+    "manager_id": null,
+    "hire_date": "2023-01-01",
+    "tenure_months": 45,
+    "work_format": "remote",
+    "preferred_language": "ru",
+    "career_goal": null,
+    "skills": {
+      "SK_SYSTEM_DESIGN": 2,
+      "SK_PUBLIC_SPEAKING": 0
+    },
+    "last_review_date": "2026-09-01"
+  },
+  "effective_skills": {
+    "SK_SYSTEM_DESIGN": 2,
+    "SK_PUBLIC_SPEAKING": 0
+  },
+  "trajectory": {
+    "target_role": "Backend Engineer",
+    "target_grade": "Senior",
+    "target_source": "next_grade",
+    "progress_pct": 40.0,
+    "remaining_gap": 3,
+    "critical_gaps": 1,
+    "gaps": [
+      {
+        "skill_id": "SK_SYSTEM_DESIGN",
+        "name": "System Design",
+        "current": 2,
+        "required": 4,
+        "gap": 2,
+        "critical": true
+      },
+      {
+        "skill_id": "SK_PUBLIC_SPEAKING",
+        "name": "Public Speaking",
+        "current": 0,
+        "required": 1,
+        "gap": 1,
+        "critical": false
+      }
+    ],
+    "note": "Покрытие требований по навыкам, не вероятность и не гарантия повышения."
+  },
+  "history": [
+    {
+      "record_id": "R0",
+      "employee_id": "E0001",
+      "event_id": "EV_TALK",
+      "date": "2026-09-10",
+      "due_date": "",
+      "status": "no_show",
+      "completion_pct": "0",
+      "score": "",
+      "feedback_rating": "",
+      "assigned_by": "self"
+    },
+    {
+      "record_id": "R1",
+      "employee_id": "E0001",
+      "event_id": "EV_TALK",
+      "date": "2026-09-11",
+      "due_date": "",
+      "status": "no_show",
+      "completion_pct": "0",
+      "score": "",
+      "feedback_rating": "",
+      "assigned_by": "self"
+    },
+    {
+      "record_id": "R2",
+      "employee_id": "E0001",
+      "event_id": "EV_TALK",
+      "date": "2026-09-12",
+      "due_date": "",
+      "status": "no_show",
+      "completion_pct": "0",
+      "score": "",
+      "feedback_rating": "",
+      "assigned_by": "self"
+    }
+  ],
+  "as_of_date": "2026-10-01",
+  "data_version": 1
+}
