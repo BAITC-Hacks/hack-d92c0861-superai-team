@@ -1,7 +1,9 @@
 import skillData from './skills.json'
 import employeeData from './employees.json'
 import eventData from './events.json'
-import history from './history.json'
+import historyData from './history.json'
+
+const history = historyData.rows.map(row => Object.fromEntries(historyData.columns.map((key, index) => [key, row[index]])))
 
 export const employees = employeeData.employees
 export const events = eventData.events
