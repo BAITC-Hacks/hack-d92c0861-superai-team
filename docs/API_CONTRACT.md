@@ -4,7 +4,7 @@
 В .env на сервере HR_TOKEN, EMPLOYEE_TOKEN, EMPLOYEE_ID. В HTTP: Authorization: Bearer <token>.
 Токены не публикуются в документации и не возвращаются /api/auth/me.
 
-| Метод | Путь | Доступ | Статус starter |
+| Метод | Путь | Доступ | Статус текущего main |
 |---|---|---|---|
 | GET | /api/health | Без токена | Работает |
 | GET | /api/auth/me | Employee/HR | Работает |
@@ -13,9 +13,9 @@
 | GET | /api/employees/{id}/recommendations | Свой/HR | Работает, RecommendationResponse |
 | GET | /api/events | Employee/HR | Работает, каталог |
 | GET | /api/skills | Employee/HR | Работает, skills + role_profiles |
-| POST | /api/employees/{id}/complete | Свой/HR | 501, реализует Дамир |
-| POST | /api/admin/import | HR | 501, реализует Дамир |
-| GET | /api/hr/overview | HR | 501, реализует Дамир |
+| POST | /api/employees/{id}/complete | Свой/HR | Работает, SQLite + идемпотентность |
+| POST | /api/admin/import | HR | Работает, атомарный импорт |
+| GET | /api/hr/overview | HR | Работает, сводка без LLM |
 
 ## Python boundary
 ```python
@@ -72,7 +72,7 @@ participation: счётчики всех исходных статусов, бе
 
 ## Ошибки и state
 401 — нет/невалиден токен; 403 — нет прав; 404 — объект не найден; 409 — конфликт версии/операции;
-422 — невалидный ввод; 501 — только временные starter-заглушки.
+422 — невалидный ввод. Три обязательных маршрута завершения, импорта и HR больше не являются заглушками.
 Прикладная ошибка: {"detail":{"code":"...","message":"..."}}.
 Стандартная FastAPI validation-ошибка может иметь detail как массив; api.js уже обрабатывает её безопасно.
 Рекомендация содержит data_version. Cache-key включает employee_id, data_version, конфигурацию модели.
