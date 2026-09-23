@@ -1,0 +1,38 @@
+{
+  "home": "Басты бет",
+  "catalog": "Белсенділіктер каталогы",
+  "help": "Көмек және қолдау",
+  "settings": "Баптаулар",
+  "language": "Тіл",
+  "all": "Барлығы",
+  "design": {
+    "platform": "Мансап платформасы"
+  },
+  "pages": {
+    "navigation": "Навигация",
+    "search": "Іздеу",
+    "searchEvents": "Атауы, ID немесе дағды",
+    "type": "Түрі",
+    "format": "Формат",
+    "types": {
+      "compliance": "Комплаенс",
+      "onboarding": "Бейімделу",
+      "course": "Курс",
+      "workshop": "Воркшоп",
+      "mentoring": "Тәлімгерлік",
+      "certification": "Сертификаттау",
+      "meetup": "Кездесу"
+    },
+    "formats": {
+      "online": "Онлайн",
+      "offline": "Офлайн",
+      "self_paced": "Өз қарқынымен"
+    },
+    "results": "Табылды: {count}",
+    "reset": "Сүзгілерді тазарту",
+    "hours": "{count} сағ",
+    "anytime": "Кез келген уақытта қолжетімді",
+    "mandatory": "Міндетті",
+    "optional": "Ерікті"
+  }
+}

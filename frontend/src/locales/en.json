@@ -1,0 +1,38 @@
+{
+  "home": "Home",
+  "catalog": "Activity catalog",
+  "help": "Help & support",
+  "settings": "Settings",
+  "language": "Language",
+  "all": "All",
+  "design": {
+    "platform": "Career development platform"
+  },
+  "pages": {
+    "navigation": "Navigation",
+    "search": "Search",
+    "searchEvents": "Title, ID or skill",
+    "type": "Type",
+    "format": "Format",
+    "types": {
+      "compliance": "Compliance",
+      "onboarding": "Onboarding",
+      "course": "Course",
+      "workshop": "Workshop",
+      "mentoring": "Mentoring",
+      "certification": "Certification",
+      "meetup": "Meetup"
+    },
+    "formats": {
+      "online": "Online",
+      "offline": "Offline",
+      "self_paced": "Self-paced"
+    },
+    "results": "Results: {count}",
+    "reset": "Reset filters",
+    "hours": "{count} h",
+    "anytime": "Available anytime",
+    "mandatory": "Required",
+    "optional": "Optional"
+  }
+}
